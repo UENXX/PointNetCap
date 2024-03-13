@@ -4,9 +4,14 @@ from torch.utils.data import Dataset
 
 
 class MyDataLoader(Dataset):
-    def __init__(self, root='/pub/zwz/Pointnet_Pointnet2_pytorch/data/Cap_Dataset/dataset/'):
+    def __init__(self, root='/pub/zwz/PointNetCap/data/Cap_Dataset/dataset/', train = True):
         self.root = root
         self.data_info = os.listdir(root)
+        split_index = int(len(self.data_info)*0.7)
+        if train:
+            self.data_info = self.data_info[:split_index]
+        else:
+            self.data_info = self.data_info[split_index:]
 
     def __len__(self):
         return len(self.data_info)
