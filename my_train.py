@@ -46,7 +46,7 @@ epoch_num = 1000
 start_epoch = 0
 print("Train Start")
 for epoch in range(start_epoch, epoch_num):
-    print("epoch: " + str(epoch))
+    print("epoch: " + str(epoch + 1))
     cap_extractor = cap_extractor.train()
     scheduler.step()
     mean_correct = []
@@ -63,15 +63,31 @@ for epoch in range(start_epoch, epoch_num):
         points, target = points.cuda(), target.cuda()
 
         pred, trans_feat = cap_extractor(points)
-        pred = pred.to(torch.float64)
-        target = target.to(torch.float64)
+        target = target.to(torch.float32)
         loss = criterion(pred, target, trans_feat)
         epoch_loss += loss.cpu()
-
-        correct = pred.data.eq(target.data).cpu().sum()
 
         loss.backward()
         optimizer.step()
 
 
-    print('Train Loss: %.3f' % epoch_loss)
+    print('Train Loss: %.3f' % (epoch_loss / (batch_id + 1)))
+
+    if (epoch + 1) % 5 == 0:
+        print("Test")
+        total_mse = 0
+        cap_extractor = cap_extractor.eval()
+        for batch_id, (points, target) in tqdm(enumerate(testDataLoader, 0), total=len(testDataLoader)):
+            points, target = points.cuda(), target.cuda()
+            points = points.transpose(2, 1)
+
+            points = points.to(torch.float32)
+
+            pred, trans_feat = cap_extractor(points)
+            target = target.to(torch.float32)
+            mse = criterion(pred, target, trans_feat)
+            total_mse += mse.cpu()
+
+        print("total_mse: %.3f" % (total_mse / (batch_id + 1)))
+
+
