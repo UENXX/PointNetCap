@@ -32,14 +32,14 @@ cap_extractor = model.get_model(1)
 cap_extractor = cap_extractor.cuda()
 criterion = model.get_loss()
 criterion = criterion.cuda()
-optimizer = torch.optim.Adam(
-        cap_extractor.parameters(),
-        lr=0.001,
-        betas=(0.9, 0.999),
-        eps=1e-08,
-        weight_decay=1e-4
-    )
-# optimizer = torch.optim.SGD(cap_extractor.parameters(), lr=0.01, momentum=0.9)
+# optimizer = torch.optim.Adam(
+#         cap_extractor.parameters(),
+#         lr=0.001,
+#         betas=(0.9, 0.999),
+#         eps=1e-08,
+#         weight_decay=1e-4
+#     )
+optimizer = torch.optim.SGD(cap_extractor.parameters(), lr=0.01, momentum=0.9)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.7)
 
 epoch_num = 1000
