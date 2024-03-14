@@ -43,6 +43,6 @@ if __name__ == '__main__':
     data = MyDataLoader()
     DataLoader = torch.utils.data.DataLoader(data, batch_size=12, shuffle=True)
     for points, label in DataLoader:
-        print(points)
-        print(label)
+        print(points.shape)
+        print(label.shape)
         break
