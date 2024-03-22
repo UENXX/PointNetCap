@@ -12,7 +12,7 @@ import argparse
 
 from pathlib import Path
 from tqdm import tqdm
-from data_utils.my_dataloader import MyDataLoader
+from PointNetCap.data_utils.PointCapDataset import PointCapDataset
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = BASE_DIR
@@ -22,8 +22,8 @@ torch.backends.cudnn.enable =True
 torch.backends.cudnn.benchmark = True
 
 data_path = '/pub/zwz/PointNetCap/data/dataset/'
-train_dataset = MyDataLoader(root=data_path, train=True)
-test_dataset = MyDataLoader(root=data_path, train=False)
+train_dataset = PointCapDataset(root=data_path, train=True)
+test_dataset = PointCapDataset(root=data_path, train=False)
 trainDataLoader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=10, drop_last=True)
 testDataLoader = torch.utils.data.DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=10)
 
